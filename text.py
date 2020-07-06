@@ -12,9 +12,7 @@ def maya_main_window():
 
 
 class RigAssetViewer(QtWidgets.QDialog):
-
     ASSET_DIR_PATH = "D:\Rig"
-
     IMAGE_WIDTH = 400
     IMAGE_HEIGHT = IMAGE_WIDTH / 1.77778
 
