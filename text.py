@@ -1,3 +1,7 @@
+import datetime
+import json
+import sys
+import os
 from PySide2 import QtCore, QtGui, QtWidgets
 import maya.cmds as cmds
 from shiboken2 import wrapInstance
@@ -12,7 +16,9 @@ def maya_main_window():
 
 
 class RigAssetViewer(QtWidgets.QDialog):
+
     ASSET_DIR_PATH = "D:\Rig"
+
     IMAGE_WIDTH = 400
     IMAGE_HEIGHT = IMAGE_WIDTH / 1.77778
 
@@ -102,63 +108,78 @@ class RigAssetViewer(QtWidgets.QDialog):
         self.tree_wdg.itemClicked.connect(self.onItemClicked)
 
     def onItemClicked(self):
-
         folder_path = self.filepath_le.text()
-        print folder_path
+        #print folder_path;
 
-        item = self.tree_wdg.currentItem()
-        print('File Name = %s' % (item.text(0)))
+        item = self.tree_wdg.currentItem().text(0)
+        print(item)
 
-        get_file_path = folder_path + "/" + str(item.text(0))
+        file_parent = self.tree_wdg.currentItem().parent().text(0)
+        #print file_parent
+
+        get_file_path = folder_path + "/" + file_parent + "/" + item
         print get_file_path
 
     def open_folder_dialog(self):
         directory = str(QtWidgets.QFileDialog.getExistingDirectory())
+        print directory
 
         self.filepath_le.setText('{}'.format(directory))
 
-    def load_file(self, file_path):
+    def load_file(self):
 
-        if not file_path:
+        folder_path = self.filepath_le.text()
+        item = self.tree_wdg.currentItem().text(0)
+        file_parent = self.tree_wdg.currentItem().parent().text(0)
+        get_file_path = folder_path + "/" + file_parent + "/" + item
+
+        if not get_file_path:
             return
 
-        file_info = QtCore.QFileInfo(file_path)
+        file_info = QtCore.QFileInfo(get_file_path)
         if not file_info.exists():
-            om.MGlobal.displayError("File does not exist: {0}".format(file_path))
+            om.MGlobal.displayError("File does not exist: {0}".format(get_file_path))
             return
 
         if self.open_rb.isChecked():
-            self.open_file(file_path)
+            self.open_file(get_file_path)
 
         else:
-            self.reference_file(file_path)
+            self.reference_file(get_file_path)
 
-    def open_file(self, file_path):
+    def open_file(self, get_file_path):
 
-        cmds.file(file_path, open=True, ignoreVersion=True, force=True)
+        cmds.file(get_file_path, open=True, ignoreVersion=True, force=True)
 
-    def reference_file(self, file_path):
-        cmds.file(file_path, reference=True, ignoreVersion=True)
+    def reference_file(self, get_file_path):
+        cmds.file(get_file_path, reference=True, ignoreVersion=True)
 
     def refresh_list(self):
-        self.tree_wdg.clear()
+        # self.tree_wdg.clear()
+        folder_path = self.filepath_le.text()
 
-        self.add_children(None, self.ASSET_DIR_PATH)
+        if folder_path:
+            self.add_children(None, self.ASSET_DIR_PATH)
+
+        # if not folder_path:
+        #    return
+        # else:
+
+        #    self.add_children(None, self.ASSET_DIR_PATH)
+        #self.add_children(None, self.ASSET_DIR_PATH)
 
     def add_children(self, parent_item, dir_path):
-
+        print dir_path
         directory = QtCore.QDir(dir_path)
 
         files_in_directory = directory.entryList(QtCore.QDir.NoDotAndDotDot | QtCore.QDir.AllEntries, QtCore.QDir.DirsFirst | QtCore.QDir.IgnoreCase)
 
         for file_name in files_in_directory:
             self.add_child(parent_item, dir_path, file_name)
-            #print file_name
 
     def add_child(self, parent_item, dir_path, file_name):
 
         file_path = "{0}/{1}".format(dir_path, file_name)
-        #print file_path
 
         file_info = QtCore.QFileInfo(file_path)
 
