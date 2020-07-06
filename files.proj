@@ -4,5 +4,6 @@
 "./includefile.conf"
 "./prunefile.conf"
 "./prunefix.conf"
+"./readme"
 "./setup.cfg"
 "./text.py"
