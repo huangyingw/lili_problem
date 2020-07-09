@@ -1,0 +1,17 @@
+{
+    "soldierA": {
+        "image_path": "SoldierA_Rig_SC.jpg",
+        "name": "soldierA",
+        "description": "soldierA"
+    },
+    "Tank": {
+        "image_path": "Tank_Rig_SC.jpg",
+        "name": "Tank",
+        "description": "Tank"
+    },
+    "Finger": {
+        "image_path": "Finger_Rig_SC.jpg",
+        "name": "Finger",
+        "description": "Finger Dance:"
+    }
+}
