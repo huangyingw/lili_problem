@@ -3,3 +3,18 @@
 第二個是 我想要在tree widget點擊我要選項，然後得到那一個path..存起來給另一個按鈕去打開..現在是可以點擊print 名字，可是path不對,想要一個完整path..這好像要是點擊其他文件檔案就錯了，我先錄影片並給你看下代碼
 
 （第二個問題我解決了）😂, 只是哪個folder_path怎麼變成global去判斷
+
+
+
+你这个代码, 我这边要跑起来, 很麻烦, 得装一些package, 有些, 可能还是windows下的,我这边, 没有windows环境, 所以, 只能纯粹读代码来帮你分析. 
+现在看起来, 那个File list:, 也就是self.tree_wdg
+
+
+the only place to add item to self.tree_wdg is here:
+            self.tree_wdg.addTopLevelItem(item)
+
+
+to debug, add more print, like following to see, if is it possible to go to self.tree_wdg.addTopLevelItem(item) 
+        print('parent_item --> %s' % parent_item)
+        if not parent_item:
+            self.tree_wdg.addTopLevelItem(item)
