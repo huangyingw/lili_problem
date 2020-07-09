@@ -1,7 +1,7 @@
 import json
 import sys
 import os
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
 
 class Second(QtWidgets.QDialog):
@@ -78,6 +78,7 @@ class Second(QtWidgets.QDialog):
         print (old_asset)
 
     def save_assets_to_json(self):
+        os.chmod(self.file_path, 0777)
         with open(self.file_path, "w") as file_for_write:
             json.dump(self.assets, file_for_write, indent=4)
 
