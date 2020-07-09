@@ -63,34 +63,30 @@ class Second(QtWidgets.QDialog):
         self.select_file_path_btn.clicked.connect(self.show_file_select_dialog)
 
     def show_file_select_dialog(self):
-        file_path, self.selected_filter = QtWidgets.QFileDialog.getOpenFileName(self, "Select File", "", self.FILE_FILTERS)
-        if file_path:
-            self.filepath_le.setText(file_path)
-            self.load_assets_from_json(file_path)
-            self.save_assets_to_json(file_path)
+        self.file_path, self.selected_filter = QtWidgets.QFileDialog.getOpenFileName(self, "Select File", "", self.FILE_FILTERS)
+        if self.file_path:
+            self.filepath_le.setText(self.file_path)
+            self.load_assets_from_json()
 
-    def load_assets_from_json(self, file_path):
+    def load_assets_from_json(self):
 
-        with open(file_path, "r") as file_for_read:
+        with open(self.file_path, "r") as file_for_read:
             self.assets = json.load(file_for_read)
         old_asset = self.assets
         for asset_code in self.assets.keys():
             print (asset_code)
         print (old_asset)
 
-    def save_assets_to_json(self, file_path):
-
-        with open(file_path, "w") as file_for_write:
+    def save_assets_to_json(self):
+        with open(self.file_path, "w") as file_for_write:
             json.dump(self.assets, file_for_write, indent=4)
 
     def save_asset_details(self):
 
         New_asset = self.name_le.text()
-        New_asset["name"] = self.name_le.text()
-        New_asset["description"] = self.description_plaintext.toPlainText()
 
-        old_asset.update(self.assets)
-
+        self.assets.update({'name': self.name_le.text()})
+        self.assets.update({'description': self.description_plaintext.toPlainText()})
         self.save_assets_to_json()
 
 
